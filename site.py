@@ -8,8 +8,11 @@ def index():
 @app.route('/uptime')
 def uptime():
     import uprecord
-    records, total = uprecord.read_file('/var/log/uptimed/records')
-    chart = uprecord.graph_records({'localhost': records})
+
+    records_dict = dict()
+    records = uprecord.read_file('/var/log/uptimed/records')[0]
+    records_dict['localhost'] = sorted(records, key=lambda x: x[1])
+    chart = uprecord.graph_records(records_dict)
     return chart
 
 if __name__ == '__main__':
