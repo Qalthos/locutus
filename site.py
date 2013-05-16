@@ -1,6 +1,7 @@
-from flask import Flask
+from datetime import datetime
 from urllib import urlretrieve
 
+from flask import Flask, request
 app = Flask(__name__)
 
 @app.route('/')
@@ -11,12 +12,26 @@ def index():
 def uptime():
     import uprecord
 
+
+    since = request.args.get('since')
+    if since:
+        try:
+            since = since.split('-')
+            since = datetime(year=int(since[0]), month=int(since[1]),
+                             day=int(since[2]))
+        except:
+            since = None
+
     records_dict = dict()
     records = uprecord.read_file('/var/log/uptimed/records')[0]
+    if since:
+        records = filter(lambda x: x[1] > since, records)
     records_dict['localhost'] = sorted(records, key=lambda x: x[1])
     for hostname in ['tron', 'locutus']:
         local_copy = urlretrieve('http://' + hostname + '/uptimed/records', hostname)[0]
         records = uprecord.read_file(local_copy)[0]
+        if since:
+            records = filter(lambda x: x[1] > since, records)
         records_dict[hostname] = sorted(records, key=lambda x: x[1])
 
     chart = uprecord.graph_records(records_dict)
