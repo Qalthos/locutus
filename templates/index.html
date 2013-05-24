@@ -1,0 +1,15 @@
+{% extends "master.html" %}
+{% block body %}
+  <div>
+    <a href='/uptime'>Server uptimes</a>
+  </div>
+  <div class='services'>
+    <ul>
+    {% for service in running %}
+      <li>{{ service }}: <span>{{ 'Up' if running[service] else 'Down' }}</span></li>
+    {% else %}
+      <li><em>Unbelievable.  No entries here so far</em></li>
+    {% endfor %}
+    </ul>
+  </div>
+{% endblock %}

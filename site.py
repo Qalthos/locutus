@@ -2,13 +2,31 @@ from __future__ import print_function, unicode_literals
 from datetime import datetime
 from urllib import urlretrieve
 
-from flask import Flask, request
+from flask import Flask, request, render_template
 app = Flask(__name__)
 sites = ['tron', 'locutus']
+target_processes = ['minecraft', 'Team Fortress 2', 'znc', 'minidlna']
+
 
 @app.route('/')
 def index():
-    return 'welcome to flask'
+    import psutil
+    try:
+        running = dict(map(lambda x: (x, False), target_processes))
+        for p in psutil.process_iter():
+            if p.name == 'java' and p.cmdline[-1] == 'craftbukkit.jar':
+                running['minecraft'] = True
+            elif p.name in ['znc', 'minidlna']:
+                running[p.name] = True
+            elif p.name == 'tmux':
+                cmd = p.cmdline
+                if len(cmd) == 5 and cmd[3] == 'srcds':
+                    running['Team Fortress 2'] = True
+        text = render_template('index.html', running=running)
+    except Exception as e:
+        text = str(running)
+    return text
+
 
 @app.route('/uptime')
 def uptime():
