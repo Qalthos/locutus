@@ -29,7 +29,7 @@ def uptime():
         records = filter(lambda x: x[1] > since, records)
     records_dict['localhost'] = sorted(records, key=lambda x: x[1])
     for hostname in sites:
-        local_copy = urlretrieve('http://' + hostname + '/uptimed/records', hostname)[0]
+        local_copy = urlretrieve('http://{}/uptimed/records'.format(hostname), '/tmp/{}_records'.format(hostname))[0]
         records = uprecord.read_file(local_copy)[0]
         if since:
             records = filter(lambda x: x[1] > since, records)
