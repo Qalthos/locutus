@@ -3,6 +3,7 @@ from urllib import urlretrieve
 
 from flask import Flask, request
 app = Flask(__name__)
+sites = ['tron', 'locutus']
 
 @app.route('/')
 def index():
@@ -27,7 +28,7 @@ def uptime():
     if since:
         records = filter(lambda x: x[1] > since, records)
     records_dict['localhost'] = sorted(records, key=lambda x: x[1])
-    for hostname in ['tron', 'locutus']:
+    for hostname in sites:
         local_copy = urlretrieve('http://' + hostname + '/uptimed/records', hostname)[0]
         records = uprecord.read_file(local_copy)[0]
         if since:
