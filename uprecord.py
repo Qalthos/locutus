@@ -71,14 +71,11 @@ def print_records(records, newest):
 def read_file(filename):
     records = []
     total = timedelta()
-    #cutoff = datetime(year=2012, month=11, day=19, hour=0, minute=56, second=0)
     with open(filename) as record_file:
         for index, line in enumerate(record_file):
             record_tuple = line.split(':', 2)
             record_tuple[0] = timedelta(seconds=int(record_tuple[0]))
             record_tuple[1] = datetime.fromtimestamp(int(record_tuple[1]))
-            #if record_tuple[1] < cutoff:
-            #    continue
             records.append(record_tuple)
             total += record_tuple[0]
     return records, total

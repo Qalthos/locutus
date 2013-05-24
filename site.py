@@ -32,7 +32,6 @@ def index():
 def uptime():
     import uprecord
 
-
     since = request.args.get('since')
     if since:
         try:
