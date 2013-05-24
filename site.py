@@ -55,5 +55,6 @@ def uptime():
     chart = uprecord.graph_records(records_dict)
     return chart
 
+
 if __name__ == '__main__':
-    app.run()
+    app.run(host='0')
