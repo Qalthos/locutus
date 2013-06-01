@@ -41,8 +41,15 @@ def uptime():
         except:
             since = None
 
+    exclude = request.args.get('exclude', [])
+    if exclude:
+        try:
+            exclude = exclude.split(',')
+        except:
+            exclude = []
+
     records_dict = dict()
-    for hostname in sites:
+    for hostname in filter(lambda x: x not in exclude, sites):
         try:
             local_copy = urlretrieve('http://{}/uptimed/records'.format(hostname), '/tmp/{}_records'.format(hostname))[0]
         except:
