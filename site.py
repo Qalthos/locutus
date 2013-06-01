@@ -59,8 +59,7 @@ def uptime():
             records = filter(lambda x: x[1] > since, records)
         records_dict[hostname] = sorted(records, key=lambda x: x[1])
 
-    chart = uprecord.graph_records(records_dict)
-    return chart
+    return uprecord.graph_records(records_dict)
 
 
 if __name__ == '__main__':
