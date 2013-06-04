@@ -1,15 +1,23 @@
 {% extends "master.html" %}
 {% block body %}
-  <div>
-    <a href='/uptime'>Server uptimes</a>
+  <div id='main'>
+    <img src='/static/Linky_Books.jpg' />
+    <div>
+      Image by <a href="http://mystressofdarkness13.deviantart.com/art/Linky-Books-60841358">Mystressofdarkness13</a> on deviantart.
+    </div>
   </div>
-  <div class='services'>
-    <ul>
-    {% for service in running %}
-      <li>{{ service }}: <span>{{ 'Up' if running[service] else 'Down' }}</span></li>
-    {% else %}
-      <li><em>Unbelievable.  No entries here so far</em></li>
-    {% endfor %}
-    </ul>
+  <div id='sidebar'>
+    <div>
+      <a href='/uptime'>Server uptimes</a>
+    </div>
+    <div class='services'>
+      <ul>
+      {% for service in running %}
+        <li>{{ service }}: <span>{{ 'Up' if running[service] else 'Down' }}</span></li>
+      {% else %}
+        <li><em>Unbelievable.  No entries here so far</em></li>
+      {% endfor %}
+      </ul>
+    </div>
   </div>
 {% endblock %}
