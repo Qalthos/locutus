@@ -31,7 +31,9 @@ def show_details(records, newest, oldest, total):
 def graph_records(record_files):
     from pygal import DateY
 
-    chart = DateY(x_label_rotation=20)
+    chart = DateY(x_label_rotation=20,
+                  js=['http://kozea.github.io/pygal.js/javascripts/svg.jquery.js',
+                      'http://linkybook.com/static/uptime.js'])
     for name, record_list in record_files.items():
         values = []
         up, down = timedelta(), timedelta()
