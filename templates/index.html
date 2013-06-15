@@ -7,15 +7,17 @@
     </div>
   </div>
   <div id='sidebar'>
-    <div>
-      <a href='/uptime'>Server uptimes</a>
+    <div class='links'>
+      <ul>
+        <li><a href='/map/'>Minecraft Map</a></li>
+        <li><a href='http://blog.linkybook.com'>Blog</a></li>
+        <li><a href='/uptime'>Server uptimes</a></li>
+      </ul>
     </div>
     <div class='services'>
       <ul>
       {% for service in running %}
         <li>{{ service }}: <span>{{ 'Up' if running[service] else 'Down' }}</span></li>
-      {% else %}
-        <li><em>Unbelievable.  No entries here so far</em></li>
       {% endfor %}
       </ul>
     </div>
