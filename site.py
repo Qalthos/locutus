@@ -4,7 +4,7 @@ from urllib import urlretrieve
 
 from flask import Flask, request, render_template
 app = Flask(__name__)
-sites = ['tron', 'locutus']
+sites = ['tron', 'locutus', 'yacht.rit.edu']
 target_processes = ['minecraft', 'Team Fortress 2', 'znc', 'minidlna']
 
 
