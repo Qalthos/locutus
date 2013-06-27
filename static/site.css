@@ -16,3 +16,13 @@
 .clear {
     clear: both;
 }
+li {
+  height: 32px;
+  vertical-align: middle;
+}
+#tf2 {
+  list-style-image: url(/static/icons/tf2.png);
+}
+#minecraft {
+  list-style-image: url(/static/icons/minecraft.png);
+}
