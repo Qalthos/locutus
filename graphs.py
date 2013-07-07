@@ -34,5 +34,8 @@ def graph_uptime(record_files):
     
 def graph_records(record_files):
     chart = Line(BaseConfig)
+    max_len = max(map(len, record_files.values))
+    for name, record_list in record_files.items():
+        chart.add(name, [None] * (max_len - len(record_list)) + record_list)
                      
     return chart.render()
