@@ -49,6 +49,15 @@ def uptime():
         except:
             exclude = []
 
+    return graphs.graph_uptime(cache_and_sort(exclude, since))
+
+    
+@app.route('/records')
+def records():
+    return graphs.graph_records(cache_and_sort(exclude, since))
+
+        
+def cache_and_sort(exclude='', since=None):
     records_dict = dict()
     for hostname in filter(lambda x: x not in exclude, sites):
         try:
@@ -59,8 +68,8 @@ def uptime():
         if since:
             records = filter(lambda x: x[1] > since, records)
         records_dict[hostname] = sorted(records, key=lambda x: x[1])
-
-    return graphs.graph_uptime(records_dict)
+        
+    return records_dict
 
 
 if __name__ == '__main__':
