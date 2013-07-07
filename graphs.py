@@ -1,7 +1,7 @@
-from pygal import DateY
+from pygal import DateY, Line
 
 
-def graph_records(record_files):
+def graph_uptime(record_files):
     chart = DateY(x_label_rotation=20,
                   js=['http://kozea.github.io/pygal.js/javascripts/svg.jquery.js',
                       'http://linkybook.com/static/uptime.js'])
@@ -24,4 +24,11 @@ def graph_records(record_files):
                            (up+down).total_seconds()))
 
         chart.add(name, values)
+    return chart.render()
+    
+def graph_records(record_files):
+    chart = Line(x_label_rotation=20,
+                 js=['http://kozea.github.io/pygal.js/javascripts/svg.jquery.js',
+                     'http://linkybook.com/static/uptime.js'])
+                     
     return chart.render()
