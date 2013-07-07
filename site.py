@@ -54,7 +54,20 @@ def uptime():
 
 @app.route('/records')
 def records():
-    return graphs.graph_records(cache_and_sort())
+    records = cache_and_sort()
+
+    limit = request.args.get('limit')
+    if limit:
+        try:
+            limit = int(limit)
+            for name in records:
+                # only look at the $limit most recent records
+                records[name] = records[name][-limit:]
+        except:
+            pass
+
+
+    return graphs.graph_records(records)
 
 
 def cache_and_sort(exclude='', since=None):
