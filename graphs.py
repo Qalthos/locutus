@@ -1,10 +1,16 @@
-from pygal import DateY, Line
+from pygal import Config, DateY, Line
+
+
+class BaseConfig(Config):
+    def __init__(self, *a, **kw):
+        super(BaseConfig, self).__init__(*a, **kw)
+        self.x_label_rotation=20
+        self.js = ['http://kozea.github.io/pygal.js/javascripts/svg.jquery.js',
+                   'http://linkybook.com/static/uptime.js']
 
 
 def graph_uptime(record_files):
-    chart = DateY(x_label_rotation=20,
-                  js=['http://kozea.github.io/pygal.js/javascripts/svg.jquery.js',
-                      'http://linkybook.com/static/uptime.js'])
+    chart = DateY(BaseConfig)
     for name, record_list in record_files.items():
         values = []
         up, down = timedelta(), timedelta()
@@ -27,8 +33,6 @@ def graph_uptime(record_files):
     return chart.render()
     
 def graph_records(record_files):
-    chart = Line(x_label_rotation=20,
-                 js=['http://kozea.github.io/pygal.js/javascripts/svg.jquery.js',
-                     'http://linkybook.com/static/uptime.js'])
+    chart = Line(BaseConfig)
                      
     return chart.render()
