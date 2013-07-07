@@ -49,12 +49,12 @@ def uptime():
         except:
             exclude = []
 
-    return graphs.graph_uptime(cache_and_sort(exclude, since))
+    return graphs.graph_uptime(cache_and_sort(exclude, since, key=1))
 
 
 @app.route('/records')
 def records():
-    records = cache_and_sort()
+    records = cache_and_sort(key=0)
 
     limit = request.args.get('limit')
     if limit:
@@ -70,7 +70,7 @@ def records():
     return graphs.graph_records(records)
 
 
-def cache_and_sort(exclude='', since=None):
+def cache_and_sort(key, exclude='', since=None):
     records_dict = dict()
     for hostname in filter(lambda x: x not in exclude, sites):
         try:
@@ -80,7 +80,8 @@ def cache_and_sort(exclude='', since=None):
         records = uprecord.read_file(local_copy)[0]
         if since:
             records = filter(lambda x: x[1] > since, records)
-        records_dict[hostname] = sorted(records, key=lambda x: x[1])
+        records_dict[hostname] = sorted(records, key=lambda x: x[key],
+                                        reverse=not key)
 
     return records_dict
 
