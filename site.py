@@ -31,6 +31,7 @@ def index():
 @app.route('/uptime')
 def uptime():
     import uprecord
+    import graphs
 
     since = request.args.get('since')
     if since:
@@ -59,7 +60,7 @@ def uptime():
             records = filter(lambda x: x[1] > since, records)
         records_dict[hostname] = sorted(records, key=lambda x: x[1])
 
-    return uprecord.graph_records(records_dict)
+    return graphs.graph_records(records_dict)
 
 
 if __name__ == '__main__':
