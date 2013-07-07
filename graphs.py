@@ -1,3 +1,7 @@
+from __future__ import division
+
+from datetime import timedelta
+
 from pygal import Bar, Config, DateY
 
 
@@ -36,6 +40,7 @@ def graph_records(record_files):
     chart = Bar(BaseConfig)
     max_len = max(map(len, record_files.values()))
     for name, record_list in record_files.items():
-        chart.add(name, [None] * (max_len - len(record_list)) + record_list)
-                     
+        chart.add(name, [None] * (max_len - len(record_list)) +
+                  map(lambda x: x[0].total_seconds()/86400, record_list))
+
     return chart.render()
