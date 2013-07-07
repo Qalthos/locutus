@@ -1,4 +1,4 @@
-from pygal import Config, DateY, Line
+from pygal import Bar, Config, DateY
 
 
 class BaseConfig(Config):
@@ -31,10 +31,10 @@ def graph_uptime(record_files):
 
         chart.add(name, values)
     return chart.render()
-    
+
 def graph_records(record_files):
-    chart = Line(BaseConfig)
-    max_len = max(map(len, record_files.values))
+    chart = Bar(BaseConfig)
+    max_len = max(map(len, record_files.values()))
     for name, record_list in record_files.items():
         chart.add(name, [None] * (max_len - len(record_list)) + record_list)
                      
