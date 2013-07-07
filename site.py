@@ -62,7 +62,7 @@ def records():
             limit = int(limit)
             for name in records:
                 # only look at the $limit most recent records
-                records[name] = records[name][-limit:]
+                records[name] = records[name][:limit]
         except:
             pass
 
