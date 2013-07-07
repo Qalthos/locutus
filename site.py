@@ -3,6 +3,9 @@ from datetime import datetime
 from urllib import urlretrieve
 
 from flask import Flask, request, render_template
+
+import graphs
+import uprecord
 app = Flask(__name__)
 sites = ['tron', 'locutus', 'yacht.rit.edu']
 target_processes = ['minecraft', 'minidlna', 'tf2', 'znc']
@@ -30,9 +33,6 @@ def index():
 
 @app.route('/uptime')
 def uptime():
-    import uprecord
-    import graphs
-
     since = request.args.get('since')
     if since:
         try:
@@ -51,12 +51,12 @@ def uptime():
 
     return graphs.graph_uptime(cache_and_sort(exclude, since))
 
-    
+
 @app.route('/records')
 def records():
-    return graphs.graph_records(cache_and_sort(exclude, since))
+    return graphs.graph_records(cache_and_sort())
 
-        
+
 def cache_and_sort(exclude='', since=None):
     records_dict = dict()
     for hostname in filter(lambda x: x not in exclude, sites):
@@ -68,7 +68,7 @@ def cache_and_sort(exclude='', since=None):
         if since:
             records = filter(lambda x: x[1] > since, records)
         records_dict[hostname] = sorted(records, key=lambda x: x[1])
-        
+
     return records_dict
 
 
