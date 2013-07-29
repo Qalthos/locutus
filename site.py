@@ -54,7 +54,14 @@ def uptime():
 
 @app.route('/records')
 def records():
-    records = cache_and_sort(key=0)
+    sort = request.args.get('sort')
+    sortable = ['big', 'new']
+    try:
+        key = sortable.index(sort)
+    except ValueError:
+        key = 0
+
+    records = cache_and_sort(key=key)
 
     limit = request.args.get('limit')
     if limit:
