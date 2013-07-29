@@ -73,11 +73,10 @@ def records():
         except:
             pass
 
-
     return graphs.graph_records(records)
 
 
-def cache_and_sort(key, exclude='', since=None):
+def cache_and_sort(exclude='', since=None, key=1):
     records_dict = dict()
     for hostname in filter(lambda x: x not in exclude, sites):
         try:
