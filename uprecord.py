@@ -61,11 +61,3 @@ if __name__ == '__main__':
     oldest = min(records, key=lambda x: x[1])
     print_records(records, newest)
     show_details(records, newest, oldest[1], total)
-
-    record_files = dict()
-    record_files['locutus'] = sorted(records, key=lambda x: x[1])
-    tron_records = read_file('records-tron')[0]
-    record_files['tron'] = sorted(tron_records, key=lambda x: x[1])
-    yacht_records = read_file('records-yacht')[0]
-    record_files['yacht'] = sorted(yacht_records, key=lambda x: x[1])
-    graph_records(record_files)
