@@ -8,7 +8,8 @@ from pygal import Bar, Config, DateY
 class BaseConfig(Config):
     def __init__(self, *a, **kw):
         super(BaseConfig, self).__init__(*a, **kw)
-        self.x_label_rotation=20
+        self.print_values = False
+        self.x_label_rotation = 20
         self.js = ['http://kozea.github.io/pygal.js/javascripts/svg.jquery.js',
                    'http://linkybook.com/static/uptime.js']
 
