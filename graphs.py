@@ -13,9 +13,15 @@ class BaseConfig(Config):
                    'http://linkybook.com/static/uptime.js']
 
 
+def sort_domains(list_of_tuples):
+    # Sort the domains by increasing specificity.
+    # Eg: host.dom.aaa comes before host.dom.bbb comes before xost.dom.bbb
+    return sorted(list_of_tuples, key=lambda x: x[0].split('.')[::-1])
+
+
 def graph_uptime(record_files):
     chart = DateY(BaseConfig)
-    for name, record_list in record_files.items():
+    for name, record_list in sort_domains(record_files.items()):
         values = []
         up, down = timedelta(), timedelta()
         last = None
@@ -39,8 +45,7 @@ def graph_uptime(record_files):
 def graph_records(record_files):
     chart = Bar(BaseConfig)
     max_len = max(map(len, record_files.values()))
-    for name, record_list in sorted(record_files.items(),
-                                    key=lambda x: x[0].split('.')[::-1]):
+    for name, record_list in sort_domains(record_files.items()):
         chart.add(name, map(lambda x: x[0].total_seconds()/86400, record_list) +
                         [None] * (max_len - len(record_list)))
 
