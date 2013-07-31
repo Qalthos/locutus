@@ -17,7 +17,7 @@
     <div class='services'>
       <ul>
       {% for service in running %}
-      <li id='service {{service}}'>{{ service }}:
+      <li id='{{service}}' class='service'>{{ service }}:
         <span class='{{running[service]}}'>{{ 'Up' if running[service] else 'Down' }}</span>
       </li>
       {% endfor %}
