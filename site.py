@@ -93,4 +93,5 @@ def cache_and_sort(exclude='', since=None, key=1):
 
 
 if __name__ == '__main__':
+    app.debug = True
     app.run(host='0')
