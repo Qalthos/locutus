@@ -3,14 +3,17 @@ from __future__ import print_function, unicode_literals
 
 from datetime import datetime, timedelta
 
-def fill_print(index, uptime, boot, kernel):
+def fill_print(index, uptime, boot, kernel, bold=False):
     index = str(index).rjust(6)
     uptime = str(uptime).rjust(20)
     kernel = kernel.strip().ljust(24)[:24]
     if isinstance(boot, datetime):
         boot = boot.strftime('%a %b %d %H:%M:%S %Y')
     boot = boot.rjust(24)
-    print('{} {} | {}  {}'.format(index, uptime, kernel, boot))
+    if bold:
+        print('\033[1m{} {} \033[0m|\033[1m {}  {}\033[0m'.format(index, uptime, kernel, boot))
+    else:
+        print('{} {} | {}  {}'.format(index, uptime, kernel, boot))
 
 def show_details(records, newest, oldest, total):
     print('-'*28+'+'+'-'*51)
@@ -34,14 +37,14 @@ def print_records(records, newest):
     newest_index = records.index(newest)
     for index, row in enumerate(records[:10]):
         if index == newest_index:
-            index = '-->' + str(index+1).rjust(3)
+            index = '->' + str(index+1).rjust(4)
         else:
             index = index+1
         fill_print(index, *row)
 
     if index < newest_index:
         print('-'*28+'+'+'-'*51)
-        fill_print('-->' + str(newest_index).rjust(3), *newest)
+        fill_print('->' + str(newest_index).rjust(4), *newest, bold=True)
 
 def read_file(filename):
     records = []
