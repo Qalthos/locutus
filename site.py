@@ -24,7 +24,7 @@ def index():
             elif p.name == 'tmux':
                 cmd = p.cmdline
                 if len(cmd) == 5 and cmd[3] == 'srcds':
-                    running['Team Fortress 2'] = True
+                    running['tf2'] = True
         text = render_template('index.html', running=running)
     except Exception as e:
         text = str(running)
