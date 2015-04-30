@@ -21,14 +21,14 @@ def index():
     try:
         running = dict(map(lambda x: (x, False), target_processes))
         for p in psutil.process_iter():
-            if p.name == 'java' and p.cmdline[-1] == 'spigot.jar':
+            name = p.name()
+            cmd = p.cmdline()
+            if name == 'spigot':
                 running['minecraft'] = True
-            elif p.name in ['znc', 'minidlna']:
-                running[p.name] = True
-            elif p.name == 'tmux':
-                cmd = p.cmdline
-                if len(cmd) == 5 and cmd[3] == 'srcds':
-                    running['tf2'] = True
+            elif name in ['znc', 'minidlna']:
+                running[name] = True
+            elif name == 'tmux' and len(cmd) == 5 and cmd[3] == 'srcds':
+                running['tf2'] = True
         text = render_template('index.html', running=running)
     except Exception as e:
         text = str(running)
