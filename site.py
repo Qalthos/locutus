@@ -17,7 +17,7 @@ def index():
     try:
         running = dict(map(lambda x: (x, False), target_processes))
         for p in psutil.process_iter():
-            if p.name == 'java' and p.cmdline[-1] == 'craftbukkit.jar':
+            if p.name == 'java' and p.cmdline[-1] == 'spigot.jar':
                 running['minecraft'] = True
             elif p.name in ['znc', 'minidlna']:
                 running[p.name] = True
