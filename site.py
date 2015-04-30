@@ -1,6 +1,10 @@
 from __future__ import print_function, unicode_literals
 from datetime import datetime
-from urllib import urlretrieve
+import logging
+try:
+    from urllib.request import urlretrieve
+except ImportError:
+    from urllib import urlretrieve
 
 from flask import Flask, request, render_template
 
