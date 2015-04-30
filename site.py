@@ -8,10 +8,11 @@ except ImportError:
 
 from flask import Flask, request, render_template
 
-import graphs
-import uprecord
+from locutus import graphs, uprecord
+
+
 app = Flask(__name__)
-sites = ['locutus.131.countess', 'tron.131.countess', 'media_pi.131.countess', 'retro_pi.131.countess', 'foss.rit.edu', 'yacht.rit.edu']
+sites = ['locutus', 'tron', 'luna', 'chibiusa']
 target_processes = ['minecraft', 'minidlna', 'tf2', 'znc']
 
 
