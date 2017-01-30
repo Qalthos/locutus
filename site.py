@@ -66,7 +66,7 @@ def records():
     except ValueError:
         key = 0
 
-    records = cache_and_sort(key=key)
+    records = cache_and_sort(key=key, reverse=True)
 
     limit = request.args.get('limit')
     if limit:
@@ -81,7 +81,7 @@ def records():
     return graphs.graph_records(records)
 
 
-def cache_and_sort(exclude='', since=None, key=1):
+def cache_and_sort(exclude='', since=None, key=1, reverse=False):
     records_dict = dict()
     for hostname in filter(lambda x: x not in exclude, sites):
         try:
@@ -92,7 +92,7 @@ def cache_and_sort(exclude='', since=None, key=1):
         if since:
             records = filter(lambda x: x[1] > since, records)
         records_dict[hostname] = sorted(records, key=lambda x: x[key],
-                                        reverse=not key)
+                                        reverse=reverse)
 
     return records_dict
 
