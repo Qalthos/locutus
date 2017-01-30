@@ -1,17 +1,15 @@
 from __future__ import division
-
 from datetime import timedelta
+import logging
 
-from pygal import Bar, Config, DateY
+from pygal import Bar, Config, DateTimeLine
 
 
 class BaseConfig(Config):
     def __init__(self, *a, **kw):
         super(BaseConfig, self).__init__(*a, **kw)
-        self.print_values = False
         self.x_label_rotation = 20
-        self.js = ['http://kozea.github.io/pygal.js/javascripts/svg.jquery.js',
-                   'http://linkybook.com/static/uptime.js']
+        #self.css.append('http://linkybook.com/static/graph.css')
 
 
 def sort_domains(list_of_tuples):
@@ -21,7 +19,7 @@ def sort_domains(list_of_tuples):
 
 
 def graph_uptime(record_files):
-    chart = DateY(BaseConfig)
+    chart = DateTimeLine(BaseConfig)
     for name, record_list in sort_domains(record_files.items()):
         values = []
         up, down = timedelta(), timedelta()

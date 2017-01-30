@@ -12,7 +12,11 @@ from locutus import graphs, uprecord
 
 
 app = Flask(__name__)
-sites = ['locutus', 'tron', 'luna', 'chibiusa']
+# For debugging
+app.config['PROPAGATE_EXCEPTIONS'] = True
+sites = [
+    'locutus', 'tron', 'luna', 'chibiusa',
+]
 target_processes = ['minecraft', 'minidlna', 'tf2', 'znc']
 
 
@@ -22,13 +26,12 @@ def index():
     running = dict(map(lambda x: (x, False), target_processes))
     for p in psutil.process_iter():
         name = p.name()
-        cmd = p.cmdline()
         if name == 'spigot':
             running['minecraft'] = True
+        elif name == 'tf2server':
+            running['tf2'] = True
         elif name in ['znc', 'minidlna']:
             running[name] = True
-        elif name == 'tmux' and len(cmd) == 5 and cmd[3] == 'srcds':
-            running['tf2'] = True
     try:
         text = render_template('index.html', running=running)
     except Exception as e:
