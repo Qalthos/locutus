@@ -20,10 +20,15 @@ def show_details(records, newest, oldest, total):
     now = datetime.now().replace(microsecond=0)
     newest_index = records.index(newest)
     newest = newest[0]
-    time_until = records[newest_index-1][0] - newest
-    fill_print('1up in', time_until, now+time_until, 'at')
-    time_until = records[0][0] - newest
-    fill_print('no1 in', time_until, now+time_until, 'at')
+    if not newest == records[0][0]:
+        time_until = records[newest_index-1][0] - newest
+        fill_print('1up in', time_until, now+time_until, 'at')
+    if newest not in [record[0] for record in records[:10]]:
+        time_until = records[9][0] - newest
+        fill_print('t10 in', time_until, now+time_until, 'at')
+    if not newest == records[0][0]:
+        time_until = records[0][0] - newest
+        fill_print('no1 in', time_until, now+time_until, 'at')
 
     fill_print('up', total, oldest, 'since')
     total_down = now-oldest-total
