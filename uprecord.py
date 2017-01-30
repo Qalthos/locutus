@@ -55,12 +55,15 @@ def read_file(filename):
     records = []
     total = timedelta()
     with open(filename) as record_file:
-        for index, line in enumerate(record_file):
-            record_tuple = line.split(':', 2)
-            record_tuple[0] = timedelta(seconds=int(record_tuple[0]))
-            record_tuple[1] = datetime.fromtimestamp(int(record_tuple[1]))
-            records.append(record_tuple)
-            total += record_tuple[0]
+        try:
+            for index, line in enumerate(record_file):
+                record_tuple = line.split(':', 2)
+                record_tuple[0] = timedelta(seconds=int(record_tuple[0]))
+                record_tuple[1] = datetime.fromtimestamp(int(record_tuple[1]))
+                records.append(record_tuple)
+                total += record_tuple[0]
+        except ValueError:
+            print('failed reading {}'.format(filename))
     return records, total
 
 if __name__ == '__main__':
