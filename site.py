@@ -1,29 +1,24 @@
-from __future__ import print_function, unicode_literals
 from datetime import datetime
-import logging
-try:
-    from urllib.request import urlretrieve
-except ImportError:
-    from urllib import urlretrieve
+from urllib.request import urlretrieve
 
-from flask import Flask, request, render_template
+from sanic import Sanic, response
+from sanic_jinja2 import SanicJinja2
+import psutil
 
 from locutus import graphs, uprecord
 
 
-app = Flask(__name__)
-# For debugging
-app.config['PROPAGATE_EXCEPTIONS'] = True
-sites = [
-    'locutus', 'tron', 'luna', 'chibiusa',
-]
-target_processes = ['minecraft', 'minidlna', 'tf2', 'znc']
+app = Sanic(__name__)
+jinja = SanicJinja2(app)
+
+
+SITES = ['locutus', 'tron', 'luna', 'artemis']
+PROCS = ['minecraft', 'minidlna', 'tf2', 'znc']
 
 
 @app.route('/')
-def index():
-    import psutil
-    running = dict(map(lambda x: (x, False), target_processes))
+def index(request):
+    running = {x: False for x in PROCS}
     for p in psutil.process_iter():
         name = p.name()
         if name == 'spigot':
@@ -33,14 +28,14 @@ def index():
         elif name in ['znc', 'minidlna']:
             running[name] = True
     try:
-        text = render_template('index.html', running=running)
+        text = jinja.render('index.html', request, running=running)
     except Exception as e:
         text = str(running)
     return text
 
 
 @app.route('/uptime')
-def uptime():
+def uptime(request):
     since = request.args.get('since')
     if since:
         try:
@@ -57,11 +52,11 @@ def uptime():
         except:
             exclude = []
 
-    return graphs.graph_uptime(cache_and_sort(exclude, since, key=1))
+    return response.html(graphs.graph_uptime(cache_and_sort(exclude, since, key=1)))
 
 
 @app.route('/records')
-def records():
+def records(request):
     sort = request.args.get('sort')
     sortable = ['big', 'new']
     try:
@@ -81,12 +76,12 @@ def records():
         except:
             pass
 
-    return graphs.graph_records(records)
+    return response.html(graphs.graph_records(records))
 
 
 def cache_and_sort(exclude='', since=None, key=1, reverse=False):
     records_dict = dict()
-    for hostname in filter(lambda x: x not in exclude, sites):
+    for hostname in (x for x in SITES if x not in exclude):
         try:
             local_copy = urlretrieve('http://{}/uptimed/records'.format(hostname), '/tmp/{}_records'.format(hostname))[0]
         except:
@@ -101,5 +96,7 @@ def cache_and_sort(exclude='', since=None, key=1, reverse=False):
 
 
 if __name__ == '__main__':
+    # For debugging
     app.debug = True
+    app.config['PROPAGATE_EXCEPTIONS'] = True
     app.run(host='0')

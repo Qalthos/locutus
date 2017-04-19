@@ -43,7 +43,7 @@ def graph_uptime(record_files):
 
 def graph_records(record_files):
     chart = Bar(BaseConfig)
-    max_len = max(map(len, record_files.values()))
+    max_len = max((len(rec) for rec in record_files.values()))
     for name, record_list in sort_domains(record_files.items()):
         chart.add(name, [x[0].total_seconds()/86400 for x in record_list] +
                         [None] * (max_len - len(record_list)))
