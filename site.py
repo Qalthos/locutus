@@ -26,7 +26,7 @@ def index():
     running = dict(map(lambda x: (x, False), target_processes))
     for p in psutil.process_iter():
         name = p.name()
-        if name == 'spigot':
+        if name == 'java' and p.username() == 'minecraft':
             running['minecraft'] = True
         elif name == 'tf2server':
             running['tf2'] = True
