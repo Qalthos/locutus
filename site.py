@@ -17,7 +17,7 @@ app.config['PROPAGATE_EXCEPTIONS'] = True
 sites = [
     'locutus', 'tron', 'luna', 'chibiusa',
 ]
-target_processes = ['minecraft', 'minidlna', 'tf2', 'znc']
+target_processes = ['minecraft', 'plex', 'tf2', 'znc']
 
 
 @app.route('/')
@@ -30,7 +30,7 @@ def index():
             running['minecraft'] = True
         elif name == 'tf2server':
             running['tf2'] = True
-        elif name in ['znc', 'minidlna']:
+        elif name in ['znc', 'plex']:
             running[name] = True
     try:
         text = render_template('index.html', running=running)
