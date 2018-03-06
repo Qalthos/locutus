@@ -13,21 +13,24 @@ app.config['PROPAGATE_EXCEPTIONS'] = True
 sites = [
     'locutus', 'tron', 'luna', 'chibiusa',
 ]
-target_processes = ['minecraft', 'plex', 'tf2', 'znc']
+target_processes = {
+    'spigot.jar': 'minecraft',
+    'Plex Media Server': 'plex',
+    'tf2server': 'tf2',
+    'znc': 'znc',
+}
 
 
 @app.route('/')
 def index():
     import psutil
-    running = dict(map(lambda x: (x, False), target_processes))
+    running = {x: False for x in target_processes.values()}
     for p in psutil.process_iter():
         name = p.name()
-        if name == 'java' and p.username() == 'minecraft':
+        if name == 'java' and p.cmdline()[-2] == 'spigot.jar':
             running['minecraft'] = True
-        elif name == 'tf2server':
-            running['tf2'] = True
-        elif name in ['znc', 'plex']:
-            running[name] = True
+        elif name in target_processes:
+            running[target_processes[name]] = True
     try:
         text = render_template('index.html', running=running)
     except Exception:
