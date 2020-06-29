@@ -1,10 +1,6 @@
 from __future__ import print_function, unicode_literals
 from datetime import datetime
-import logging
-try:
-    from urllib.request import urlretrieve
-except ImportError:
-    from urllib import urlretrieve
+from urllib.request import urlretrieve
 
 from flask import Flask, request, render_template
 
@@ -34,7 +30,7 @@ def index():
             running[name] = True
     try:
         text = render_template('index.html', running=running)
-    except Exception as e:
+    except Exception:
         text = str(running)
     return text
 
@@ -47,14 +43,14 @@ def uptime():
             since = since.split('-')
             since = datetime(year=int(since[0]), month=int(since[1]),
                              day=int(since[2]))
-        except:
+        except Exception:
             since = None
 
     exclude = request.args.get('exclude', [])
     if exclude:
         try:
             exclude = exclude.split(',')
-        except:
+        except Exception:
             exclude = []
 
     return graphs.graph_uptime(cache_and_sort(exclude, since, key=1))
@@ -78,7 +74,7 @@ def records():
             for name in records:
                 # only look at the $limit most recent records
                 records[name] = records[name][:limit]
-        except:
+        except Exception:
             pass
 
     return graphs.graph_records(records)
@@ -88,8 +84,11 @@ def cache_and_sort(exclude='', since=None, key=1, reverse=False):
     records_dict = dict()
     for hostname in filter(lambda x: x not in exclude, sites):
         try:
-            local_copy = urlretrieve('http://{}/uptimed/records'.format(hostname), '/tmp/{}_records'.format(hostname))[0]
-        except:
+            local_copy = urlretrieve(
+                'http://{}/uptimed/records'.format(hostname),
+                '/tmp/{}_records'.format(hostname)
+            )[0]
+        except Exception:
             continue
         records = uprecord.read_file(local_copy)[0]
         if since:
